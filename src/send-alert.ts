@@ -83,9 +83,15 @@ export function sendAlert(options: SendAlertOptions): void {
   if (!botToken || !chatId) return;
 
   const env = process.env.NODE_ENV || 'development';
+  const now = new Date();
+  const p = Object.fromEntries(
+    new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Bangkok', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })
+      .formatToParts(now).filter(x => x.type !== 'literal').map(x => [x.type, x.value])
+  );
+  const timestamp = `${p.day}/${p.month}/${p.year} ${p.hour}:${p.minute}:${p.second}`;
   const lines: string[] = [
     level,
-    `🕐 <b>${new Date().toISOString()}</b>`,
+    `🕐 <b>${timestamp}</b>`,
     `🌍 Env: <b>${env}</b>`,
     `🖥️ IP: <b>${getServerIp()}</b>`,
   ];

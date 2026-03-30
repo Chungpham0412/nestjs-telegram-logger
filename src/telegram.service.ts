@@ -71,7 +71,12 @@ export class TelegramService {
   }): string {
     const { level, message, context, stack, method, url, statusCode, fileLoc, clientIp } = params;
     const env = process.env.NODE_ENV || 'development';
-    const timestamp = new Date().toISOString();
+    const now = new Date();
+    const p = Object.fromEntries(
+      new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Bangkok', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })
+        .formatToParts(now).filter(x => x.type !== 'literal').map(x => [x.type, x.value])
+    );
+    const timestamp = `${p.day}/${p.month}/${p.year} ${p.hour}:${p.minute}:${p.second}`;
 
     const lines: string[] = [
       `${level}`,
