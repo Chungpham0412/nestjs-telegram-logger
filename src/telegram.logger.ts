@@ -38,6 +38,7 @@ export class TelegramLogger extends ConsoleLogger {
       fileLoc,
       method: reqCtx?.method,
       url: reqCtx?.url,
+      clientIp: reqCtx?.clientIp,
     });
 
     this.telegramService.sendMessage(text).catch(() => {});
@@ -61,6 +62,7 @@ export class TelegramLogger extends ConsoleLogger {
       fileLoc,
       method: reqCtx?.method,
       url: reqCtx?.url,
+      clientIp: reqCtx?.clientIp,
     });
 
     this.telegramService.sendMessage(text).catch(() => {});

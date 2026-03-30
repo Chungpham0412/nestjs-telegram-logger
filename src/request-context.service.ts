@@ -4,6 +4,7 @@ import { AsyncLocalStorage } from 'async_hooks';
 export interface RequestContext {
   method: string;
   url: string;
+  clientIp?: string;
 }
 
 @Injectable()

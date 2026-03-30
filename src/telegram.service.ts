@@ -67,8 +67,9 @@ export class TelegramService {
     url?: string;
     statusCode?: number;
     fileLoc?: string;
+    clientIp?: string;
   }): string {
-    const { level, message, context, stack, method, url, statusCode, fileLoc } = params;
+    const { level, message, context, stack, method, url, statusCode, fileLoc, clientIp } = params;
     const env = process.env.NODE_ENV || 'development';
     const timestamp = new Date().toISOString();
 
@@ -76,9 +77,10 @@ export class TelegramService {
       `${level}`,
       `🕐 <b>${timestamp}</b>`,
       `🌍 Env: <b>${env}</b>`,
-      `🖥️ IP: <b>${getServerIp()}</b>`,
+      `🖥️ Server IP: <b>${getServerIp()}</b>`,
     ];
 
+    if (clientIp) lines.push(`👤 Client IP: <b>${clientIp}</b>`);
     if (statusCode) lines.push(`📊 Status: <b>${statusCode}</b>`);
     if (method && url) lines.push(`🌐 Request: <b>${method} ${url}</b>`);
     if (context) lines.push(`📍 Context: <b>${context}</b>`);
