@@ -1,7 +1,18 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as https from 'https';
+import * as os from 'os';
 import { TELEGRAM_MODULE_OPTIONS } from './telegram.constants';
 import { TelegramModuleOptions } from './telegram.interfaces';
+
+function getServerIp(): string {
+  const interfaces = os.networkInterfaces();
+  for (const iface of Object.values(interfaces)) {
+    for (const addr of iface ?? []) {
+      if (addr.family === 'IPv4' && !addr.internal) return addr.address;
+    }
+  }
+  return 'unknown';
+}
 
 @Injectable()
 export class TelegramService {
@@ -65,6 +76,7 @@ export class TelegramService {
       `${level}`,
       `🕐 <b>${timestamp}</b>`,
       `🌍 Env: <b>${env}</b>`,
+      `🖥️ IP: <b>${getServerIp()}</b>`,
     ];
 
     if (statusCode) lines.push(`📊 Status: <b>${statusCode}</b>`);

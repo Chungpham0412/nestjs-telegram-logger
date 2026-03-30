@@ -9,3 +9,4 @@ export {
   TelegramOptionsFactory,
 } from './telegram.interfaces';
 export { TELEGRAM_MODULE_OPTIONS } from './telegram.constants';
+export { sendAlert, SendAlertOptions } from './send-alert';
