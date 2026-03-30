@@ -84,7 +84,8 @@ export class TelegramService {
     if (statusCode) lines.push(`📊 Status: <b>${statusCode}</b>`);
     if (method && url) lines.push(`🌐 Request: <b>${method} ${url}</b>`);
     if (context) lines.push(`📍 Context: <b>${context}</b>`);
-    if (fileLoc) lines.push(`📂 File: <b>${fileLoc}</b>`);
+    const resolvedFileLoc = fileLoc ?? this.extractFileLocation(stack);
+    if (resolvedFileLoc) lines.push(`📂 File: <b>${resolvedFileLoc}</b>`);
     lines.push(`📝 <b>Message:</b> ${message}`);
     if (stack) lines.push(`\n🔍 <b>Stack:</b>\n<pre>${stack.substring(0, 800)}</pre>`);
 

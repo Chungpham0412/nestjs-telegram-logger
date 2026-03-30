@@ -289,8 +289,7 @@ export class PaymentService {
         level: '🔴 <b>PAYMENT ERROR</b>',
         message: `Order ${orderId} failed: ${error.message}`,
         context: 'PaymentService',
-        stack: error.stack,
-        clientIp: '203.0.113.42',
+        stack: error.stack, // 📂 File: is auto-resolved from this
       });
       await this.telegram.sendMessage(message);
       throw error;
@@ -302,15 +301,15 @@ export class PaymentService {
 ### `buildMessage()` params
 
 | Param | Type | Description |
-|-------|------|-------------|
+|-------|------|--------------|
 | `level` | `string` | **required** — notification title (e.g. `'🔴 <b>ERROR</b>'`) |
 | `message` | `string` | **required** — error message text |
 | `context` | `string` | NestJS context/service name |
-| `stack` | `string` | Error stack trace (truncated to 800 chars) |
+| `stack` | `string` | Error stack trace (truncated to 800 chars). `📂 File:` is **auto-extracted** from this — no need to pass `fileLoc` separately |
 | `method` | `string` | HTTP method |
 | `url` | `string` | Request URL |
 | `statusCode` | `number` | HTTP status code |
-| `fileLoc` | `string` | Source file location (auto-resolved if omitted, or pass manually) |
+| `fileLoc` | `string` | Override the auto-resolved file location (optional) |
 | `clientIp` | `string` | Client IP address |
 
 ---
