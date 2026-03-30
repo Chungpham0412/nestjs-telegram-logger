@@ -11,9 +11,42 @@ function getServerIp(): string {
   return 'unknown';
 }
 
+function extractFileLocation(stack?: string): string | undefined {
+  if (!stack) return undefined;
+
+  const skipPatterns = [
+    'node_modules',
+    'node:internal',
+    'TelegramLogger',
+    'TelegramService',
+    'ConsoleLogger',
+    'NestApplication',
+    'send-alert',
+  ];
+
+  const appLine = stack
+    .split('\n')
+    .find((l) => l.trimStart().startsWith('at ') && !skipPatterns.some((p) => l.includes(p)));
+
+  if (!appLine) return undefined;
+
+  const match =
+    appLine.match(/\((.+?):(\d+):\d+\)/) ||
+    appLine.match(/at (.+?):(\d+):\d+/);
+
+  if (!match) return undefined;
+
+  const fullPath = match[1];
+  const line = match[2];
+  const srcIdx = fullPath.indexOf('/src/');
+  const shortPath = srcIdx >= 0 ? `src${fullPath.substring(srcIdx + 4)}` : fullPath;
+
+  return `${shortPath}:${line}`;
+}
+
 export interface SendAlertOptions {
-  botToken: string;
-  chatId: string;
+  botToken?: string;
+  chatId?: string;
   level?: string;
   context?: string;
   message: string;
@@ -31,13 +64,13 @@ export interface SendAlertOptions {
  * import { sendAlert } from '@chungpham0412/nestjs-telegram-logger';
  *
  * process.on('uncaughtException', (err) => {
- *   sendAlert({ botToken, chatId, message: err.message, stack: err.stack });
+ *   sendAlert({ message: err.message, stack: err.stack });
  * });
  */
 export function sendAlert(options: SendAlertOptions): void {
   const {
-    botToken,
-    chatId,
+    botToken = process.env.TELEGRAM_BOT_TOKEN ?? '',
+    chatId = process.env.TELEGRAM_CHAT_ID ?? '',
     level = '💀 <b>CRITICAL — APP CRASHED</b>',
     context = 'Bootstrap',
     message,
@@ -60,6 +93,10 @@ export function sendAlert(options: SendAlertOptions): void {
   if (statusCode) lines.push(`📊 Status: <b>${statusCode}</b>`);
   if (method && url) lines.push(`🌐 Request: <b>${method} ${url}</b>`);
   if (context) lines.push(`📍 Context: <b>${context}</b>`);
+
+  const fileLoc = extractFileLocation(stack);
+  if (fileLoc) lines.push(`📂 File: <b>${fileLoc}</b>`);
+
   lines.push(`📝 <b>Message:</b> ${message}`);
   if (stack) lines.push(`\n🔍 <b>Stack:</b>\n<pre>${stack.substring(0, 800)}</pre>`);
 

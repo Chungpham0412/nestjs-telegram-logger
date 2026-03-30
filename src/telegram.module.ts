@@ -24,11 +24,16 @@ export class TelegramModule {
    *   chatId: process.env.TELEGRAM_CHAT_ID,
    * })
    */
-  static forRoot(options: TelegramModuleOptions): DynamicModule {
+  static forRoot(options: TelegramModuleOptions = {}): DynamicModule {
+    const resolved: TelegramModuleOptions = {
+      botToken: options.botToken ?? process.env.TELEGRAM_BOT_TOKEN ?? '',
+      chatId: options.chatId ?? process.env.TELEGRAM_CHAT_ID ?? '',
+      minLevel: options.minLevel,
+    };
     return {
       module: TelegramModule,
       providers: [
-        { provide: TELEGRAM_MODULE_OPTIONS, useValue: options },
+        { provide: TELEGRAM_MODULE_OPTIONS, useValue: resolved },
         ...CORE_PROVIDERS,
       ],
       exports: EXPORTS,

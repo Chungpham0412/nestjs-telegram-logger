@@ -105,7 +105,7 @@ export class TelegramService {
 
     const appLine = stack
       .split('\n')
-      .find((l) => l.includes(' at ') && !skipPatterns.some((p) => l.includes(p)));
+      .find((l) => l.trimStart().startsWith('at ') && !skipPatterns.some((p) => l.includes(p)));
 
     if (!appLine) return undefined;
 
