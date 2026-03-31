@@ -118,7 +118,7 @@ TelegramModule.forRoot()
 TelegramModule.forRoot({
   botToken: 'YOUR_BOT_TOKEN',
   chatId: 'YOUR_CHAT_ID',
-  topicId: 123, // optional — Telegram topic/thread ID for supergroups
+  topicId: 'YOUR_TOPIC_ID', // optional — Telegram topic/thread ID for supergroups
   minLevel: 'warn', // 'warn' (default) | 'error'
 })
 ```
