@@ -1,6 +1,6 @@
 {
   "name": "@chungpham0412/nestjs-telegram-logger",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "NestJS module that forwards warn/error logs and HTTP 5xx errors to a Telegram group",
   "author": "chungpham0412@gmail.com",
   "license": "MIT",
