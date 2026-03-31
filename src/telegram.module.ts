@@ -29,6 +29,7 @@ export class TelegramModule {
       botToken: options.botToken ?? process.env.TELEGRAM_BOT_TOKEN ?? '',
       chatId: options.chatId ?? process.env.TELEGRAM_CHAT_ID ?? '',
       minLevel: options.minLevel,
+      topicId: options.topicId ?? process.env.TELEGRAM_TOPIC_ID,
     };
     return {
       module: TelegramModule,

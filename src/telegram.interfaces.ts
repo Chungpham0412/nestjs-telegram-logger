@@ -11,6 +11,12 @@ export interface TelegramModuleOptions {
    * @default 'warn'
    */
   minLevel?: 'warn' | 'error';
+  /**
+   * Telegram Topic (thread) ID — message_thread_id in the Bot API.
+   * Required when sending to a specific topic inside a supergroup.
+   * Defaults to process.env.TELEGRAM_TOPIC_ID
+   */
+  topicId?: string | number;
 }
 
 export interface TelegramOptionsFactory {

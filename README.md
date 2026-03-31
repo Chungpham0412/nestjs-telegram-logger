@@ -118,6 +118,7 @@ TelegramModule.forRoot()
 TelegramModule.forRoot({
   botToken: 'YOUR_BOT_TOKEN',
   chatId: 'YOUR_CHAT_ID',
+  topicId: 'YOUR_TOPIC_ID', // optional — Telegram topic/thread ID for supergroups
   minLevel: 'warn', // 'warn' (default) | 'error'
 })
 ```
@@ -180,6 +181,7 @@ TelegramModule.forRootAsync({
 |--------|------|---------|-------------|
 | `botToken` | `string` | `process.env.TELEGRAM_BOT_TOKEN` | Telegram bot token from @BotFather |
 | `chatId` | `string` | `process.env.TELEGRAM_CHAT_ID` | Target chat/group/channel ID |
+| `topicId` | `string \| number` | `process.env.TELEGRAM_TOPIC_ID` | Topic (thread) ID for supergroups with topics enabled (`message_thread_id`) |
 | `minLevel` | `'warn' \| 'error'` | `'warn'` | Minimum log level to forward. `'warn'` sends both warnings and errors; `'error'` sends errors only |
 
 ---
@@ -219,6 +221,7 @@ sendAlert({
 |--------|------|---------|-------------|
 | `botToken` | `string` | `process.env.TELEGRAM_BOT_TOKEN` | Telegram bot token. If omitted, reads from env. |
 | `chatId` | `string` | `process.env.TELEGRAM_CHAT_ID` | Target chat ID. If omitted, reads from env. |
+| `topicId` | `string \| number` | `process.env.TELEGRAM_TOPIC_ID` | Topic (thread) ID for supergroups with topics enabled (`message_thread_id`) |
 | `message` | `string` | **required** | Error message text |
 | `stack` | `string` | — | Error stack trace |
 | `level` | `string` | `'💀 CRITICAL — APP CRASHED'` | Notification title/level |
@@ -410,6 +413,7 @@ bootstrap();
 # .env
 TELEGRAM_BOT_TOKEN=123456789:ABCdefGHIjklMNOpqrSTUvwxYZ
 TELEGRAM_CHAT_ID=-1001234567890
+TELEGRAM_TOPIC_ID=456  # optional — only needed for supergroup topics
 ```
 
 ---

@@ -47,6 +47,8 @@ function extractFileLocation(stack?: string): string | undefined {
 export interface SendAlertOptions {
   botToken?: string;
   chatId?: string;
+  /** Telegram Topic (thread) ID — message_thread_id in the Bot API. Defaults to process.env.TELEGRAM_TOPIC_ID */
+  topicId?: string | number;
   level?: string;
   context?: string;
   message: string;
@@ -71,6 +73,7 @@ export function sendAlert(options: SendAlertOptions): void {
   const {
     botToken = process.env.TELEGRAM_BOT_TOKEN ?? '',
     chatId = process.env.TELEGRAM_CHAT_ID ?? '',
+    topicId = process.env.TELEGRAM_TOPIC_ID,
     level = '💀 <b>CRITICAL — APP CRASHED</b>',
     context = 'Bootstrap',
     message,
@@ -107,7 +110,11 @@ export function sendAlert(options: SendAlertOptions): void {
   if (stack) lines.push(`\n🔍 <b>Stack:</b>\n<pre>${stack.substring(0, 800)}</pre>`);
 
   const text = lines.join('\n');
-  const body = JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' });
+  const payload: Record<string, unknown> = { chat_id: chatId, text, parse_mode: 'HTML' };
+  if (topicId !== undefined && topicId !== null && topicId !== '') {
+    payload.message_thread_id = Number(topicId);
+  }
+  const body = JSON.stringify(payload);
 
   const req = https.request({
     hostname: 'api.telegram.org',

@@ -22,14 +22,18 @@ export class TelegramService {
   ) {}
 
   async sendMessage(text: string): Promise<void> {
-    const { botToken, chatId } = this.options;
+    const { botToken, chatId, topicId } = this.options;
 
     if (!botToken || !chatId) {
       console.warn('[TelegramService] botToken or chatId is not configured. Skipping notification.');
       return;
     }
 
-    const body = JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' });
+    const payload: Record<string, unknown> = { chat_id: chatId, text, parse_mode: 'HTML' };
+    if (topicId !== undefined && topicId !== null && topicId !== '') {
+      payload.message_thread_id = Number(topicId);
+    }
+    const body = JSON.stringify(payload);
 
     return new Promise((resolve) => {
       const req = https.request(
